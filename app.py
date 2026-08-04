@@ -6,15 +6,14 @@ import time
 import pandas as pd
 import plotly.express as px
 from datetime import datetime
+import json
 
-# --- 1. KẾT NỐI FIREBASE AN TOÀN ---
+# --- 1. KẾT NỐI FIREBASE AN TOÀN QUA JSON NGUYÊN BẢN ---
 if not firebase_admin._apps:
     try:
-        config = dict(st.secrets["firebase"])
-        if "private_key" in config:
-            config["private_key"] = config["private_key"].replace("\\n", "\n")
-            
-        cred = credentials.Certificate(config)
+        # Lấy trực tiếp chuỗi JSON và dịch lại thành từ điển
+        key_dict = json.loads(st.secrets["json_key"])
+        cred = credentials.Certificate(key_dict)
     except Exception:
         # Dự phòng khi chạy ở máy local
         cred = credentials.Certificate("firebase_credentials.json")
