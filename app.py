@@ -7,11 +7,14 @@ import pandas as pd
 import plotly.express as px
 from datetime import datetime
 
-# --- 1. KẾT NỐI FIREBASE AN TOÀN QUA SECRETS ---
+# --- 1. KẾT NỐI FIREBASE AN TOÀN ---
 if not firebase_admin._apps:
     try:
-        firebase_config = dict(st.secrets["firebase"])
-        cred = credentials.Certificate(firebase_config)
+        config = dict(st.secrets["firebase"])
+        if "private_key" in config:
+            config["private_key"] = config["private_key"].replace("\\n", "\n")
+            
+        cred = credentials.Certificate(config)
     except Exception:
         # Dự phòng khi chạy ở máy local
         cred = credentials.Certificate("firebase_credentials.json")
