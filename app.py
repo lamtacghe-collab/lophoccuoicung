@@ -8,13 +8,13 @@ import plotly.express as px
 from datetime import datetime
 import json
 
-# --- 1. KẾT NỐI FIREBASE QUA STREAMLIT SECRETS ---
+# --- 1. KẾT NỐI FIREBASE AN TOÀN QUA STREAMLIT SECRETS ---
 if not firebase_admin._apps:
     try:
         config_dict = json.loads(st.secrets["firebase"]["firebase_config"])
         cred = credentials.Certificate(config_dict)
     except Exception:
-        # Dự phòng khi chạy ở máy local nếu có file json
+        # Dự phòng khi chạy ở máy local
         cred = credentials.Certificate("firebase_credentials.json")
         
     firebase_admin.initialize_app(cred, {
