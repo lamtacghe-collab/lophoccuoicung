@@ -8,17 +8,22 @@ import plotly.express as px
 from datetime import datetime
 import json
 
-# --- 1. KẾT NỐI FIREBASE TRỰC TIẾP TỪ SECRETS (JSON BLOB) ---
+# --- 1. KẾT NỐI FIREBASE AN TOÀN ---
 if not firebase_admin._apps:
     try:
-        key_dict = json.loads(st.secrets["firebase_json"])
-        cred = credentials.Certificate(key_dict)
-    except Exception:
-        cred = credentials.Certificate("firebase_credentials.json")
-        
-    firebase_admin.initialize_app(cred, {
-        'databaseURL': 'https://hoc-tap-58166-default-rtdb.asia-southeast1.firebasedatabase.app/'
-    })
+        if "firebase_json" in st.secrets:
+            key_dict = json.loads(st.secrets["firebase_json"])
+            cred = credentials.Certificate(key_dict)
+        else:
+            st.error("Chưa tìm thấy khóa 'firebase_json' trong phần Secrets của Streamlit Cloud.")
+            st.stop()
+            
+        firebase_admin.initialize_app(cred, {
+            'databaseURL': 'https://hoc-tap-58166-default-rtdb.asia-southeast1.firebasedatabase.app/'
+        })
+    except Exception as e:
+        st.error(f"Lỗi cấu hình Firebase hoặc Secrets: {e}")
+        st.stop()
 
 st.title("🖤 Lớp học Hắc Ám")
 
