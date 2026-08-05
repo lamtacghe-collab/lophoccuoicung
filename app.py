@@ -7,13 +7,9 @@ import pandas as pd
 import plotly.express as px
 from datetime import datetime
 
-# --- 1. KẾT NỐI FIREBASE TRỰC TIẾP QUA DICT SECRETS ---
+# --- 1. KẾT NỐI FIREBASE ---
 if not firebase_admin._apps:
-    try:
-        cred = credentials.Certificate(dict(st.secrets["firebase"]))
-    except Exception:
-        cred = credentials.Certificate("firebase_credentials.json")
-        
+    cred = credentials.Certificate("firebase_credentials.json")
     firebase_admin.initialize_app(cred, {
         'databaseURL': 'https://hoc-tap-58166-default-rtdb.asia-southeast1.firebasedatabase.app/'
     })
