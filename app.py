@@ -8,10 +8,12 @@ import plotly.express as px
 from datetime import datetime
 import json
 
-# --- 1. KẾT NỐI FIREBASE QUA JSON NGUYÊN BẢN ---
+# --- 1. KẾT NỐI FIREBASE AN TOÀN & CHUẨN HÓA KHÓA ---
 if not firebase_admin._apps:
     try:
         key_dict = json.loads(st.secrets["json_key"])
+        if "private_key" in key_dict:
+            key_dict["private_key"] = key_dict["private_key"].replace("\\n", "\n")
         cred = credentials.Certificate(key_dict)
     except Exception:
         # Dự phòng khi chạy ở máy local
