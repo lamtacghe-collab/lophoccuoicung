@@ -11,19 +11,26 @@ import json
 # --- 1. KẾT NỐI FIREBASE AN TOÀN ---
 if not firebase_admin._apps:
     try:
-        if "firebase_json" in st.secrets:
-            key_dict = json.loads(st.secrets["firebase_json"])
-            cred = credentials.Certificate(key_dict)
-        else:
-            st.error("Chưa tìm thấy khóa 'firebase_json' trong phần Secrets của Streamlit Cloud.")
-            st.stop()
-            
-        firebase_admin.initialize_app(cred, {
-            'databaseURL': 'https://hoc-tap-58166-default-rtdb.asia-southeast1.firebasedatabase.app/'
-        })
-    except Exception as e:
-        st.error(f"Lỗi cấu hình Firebase hoặc Secrets: {e}")
-        st.stop()
+        config = {
+            "type": st.secrets["type"],
+            "project_id": st.secrets["project_id"],
+            "private_key_id": st.secrets["private_key_id"],
+            "private_key": st.secrets["private_key"],
+            "client_email": st.secrets["client_email"],
+            "client_id": st.secrets["client_id"],
+            "auth_uri": st.secrets["auth_uri"],
+            "token_uri": st.secrets["token_uri"],
+            "auth_provider_x509_cert_url": st.secrets["auth_provider_x509_cert_url"],
+            "client_x509_cert_url": st.secrets["client_x509_cert_url"],
+            "universe_domain": st.secrets["universe_domain"]
+        }
+        cred = credentials.Certificate(config)
+    except Exception:
+        cred = credentials.Certificate("firebase_credentials.json")
+        
+    firebase_admin.initialize_app(cred, {
+        'databaseURL': 'https://hoc-tap-58166-default-rtdb.asia-southeast1.firebasedatabase.app/'
+    })
 
 st.title("🖤 Lớp học Hắc Ám")
 
