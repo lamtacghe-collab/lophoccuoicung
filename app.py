@@ -7,7 +7,7 @@ import pandas as pd
 import plotly.express as px
 from datetime import datetime
 
-# --- 1. KẾT NỐI FIREBASE AN TOÀN ---
+# --- 1. KẾT NỐI FIREBASE AN TOÀN TỪ SECRETS ---
 if not firebase_admin._apps:
     try:
         config = {
@@ -21,11 +21,11 @@ if not firebase_admin._apps:
             "token_uri": st.secrets["token_uri"],
             "auth_provider_x509_cert_url": st.secrets["auth_provider_x509_cert_url"],
             "client_x509_cert_url": st.secrets["client_x509_cert_url"],
-            "universe_domain": st.secrets["universe_domain"]
+            "universe_domain": "googleapis.com"
         }
         cred = credentials.Certificate(config)
     except Exception:
-        # Chạy dự phòng trên máy cá nhân nếu có file JSON
+        # Dự phòng chạy ở máy local
         cred = credentials.Certificate("firebase_credentials.json")
         
     firebase_admin.initialize_app(cred, {
