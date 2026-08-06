@@ -6,7 +6,6 @@ import time
 import pandas as pd
 import plotly.express as px
 from datetime import datetime
-import json
 
 # --- 1. KẾT NỐI FIREBASE AN TOÀN ---
 if not firebase_admin._apps:
@@ -26,6 +25,7 @@ if not firebase_admin._apps:
         }
         cred = credentials.Certificate(config)
     except Exception:
+        # Chạy dự phòng trên máy cá nhân nếu có file JSON
         cred = credentials.Certificate("firebase_credentials.json")
         
     firebase_admin.initialize_app(cred, {
