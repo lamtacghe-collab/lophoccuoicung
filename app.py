@@ -9,10 +9,19 @@ from datetime import datetime
 
 # --- 1. KẾT NỐI FIREBASE TRỰC TIẾP ---
 if not firebase_admin._apps:
-    cred = credentials.Certificate("firebase_credentials.json")
-    firebase_admin.initialize_app(cred, {
-        'databaseURL': 'https://hoc-tap-58166-default-rtdb.asia-southeast1.firebasedatabase.app/'
-    })
+    firebase_config = dict(st.secrets["firebase"])
+
+    # Khôi phục ký tự xuống dòng trong private key
+    firebase_config["private_key"] = firebase_config["private_key"].replace("\\n", "\n")
+
+    cred = credentials.Certificate(firebase_config)
+
+    firebase_admin.initialize_app(
+        cred,
+        {
+            "databaseURL": "https://hoc-tap-58166-default-rtdb.asia-southeast1.firebasedatabase.app/"
+        }
+    )
 
 st.title("🖤 Lớp học Hắc Ám")
 
